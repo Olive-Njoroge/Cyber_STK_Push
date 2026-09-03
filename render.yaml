@@ -1,0 +1,32 @@
+# Render blueprint. Point Render at this repo and it reads the service config
+# from here. Secrets are marked sync:false — Render prompts for them once and
+# stores them; they never live in git.
+services:
+  - type: web
+    name: cyber-stk-api
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: PAYHERO_API_USERNAME
+        sync: false
+      - key: PAYHERO_API_PASSWORD
+        sync: false
+      - key: PAYHERO_CHANNEL_ID
+        value: "6669"
+      - key: MONGODB_URI
+        sync: false
+      # Must be this service's own public URL. Render does not know it until
+      # the first deploy, so set it in the dashboard once and redeploy.
+      - key: CALLBACK_URL
+        sync: false
+      # The Vercel origin, no trailing slash.
+      - key: CORS_ORIGIN
+        sync: false
+      # Worth turning on here: on the free plan a spun-down instance can miss a
+      # callback entirely, and the sweep is what recovers those rows.
+      - key: ENABLE_STALE_SWEEP
+        value: "true"

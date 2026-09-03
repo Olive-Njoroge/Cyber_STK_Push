@@ -1,0 +1,21 @@
+# deps
+node_modules/
+
+# env - every variant, except the committed templates
+.env*
+!.env.example
+
+# build output
+client/dist/
+dist/
+build/
+
+# logs
+*.log
+npm-debug.log*
+
+# editor / os
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
